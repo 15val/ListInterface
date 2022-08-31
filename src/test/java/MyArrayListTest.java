@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MyArrayListTest {
     private MyArrayList<Integer> list = new MyArrayList<>();
-    private Integer[] elements = new Integer[10];
+
 
 
 
@@ -25,9 +25,7 @@ class MyArrayListTest {
        list.add(1);
        list.add(2);
        list.add(3);
-       elements[0] = 1;
-       elements[1] = 2;
-       elements[2] = 3;
+
     }
 
     @Test
