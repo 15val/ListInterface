@@ -42,5 +42,9 @@ R
 ,src/main/java/interfaces/MyAbstractList.java,0\b\0be41431c0631aee6cfaa98c3af7835c81ad6c3c
 Z
 *src/main/java/linkedlist/MyLinkedList.java,d\5\d57afcf5f1d54f0bc58fc11aa145f70ff7d1dbce
-S
-#src/test/java/MyLinkedListTest.java,7\5\75f364ce24ef76b7311f93b95f81aeef65caf8ec
+\
+,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
+Q
+!src/main/java/interfaces/Map.java,d\f\df1d86929775c7addca769d4c118f9bc82202305
+[
++src/main/java/interfaces/MyAbstractMap.java,a\7\a7d2d3d1fa9c033d0ab24bbb59c9d267880a3977

@@ -1,4 +1,5 @@
 import hashmap.MyHashMap;
+import linkedhashmap.MyLinkedHashMap;
 import linkedlist.MyLinkedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MyHashMapTest {
     private MyHashMap<Integer, String> map = new MyHashMap<>();
+    private MyHashMap<Integer, String> nullMap = new MyHashMap<>();
 
 
 
@@ -41,6 +43,11 @@ public class MyHashMapTest {
         map.put(7, "seven");
         assertThat("seven", equalTo(map.getByKey(7)));
     }
+    @Test
+    void shouldReturnSize3WhenPuttingNullKey(){
+        map.put(null, "seven");
+        assertThat(3, equalTo(map.size()));
+    }
 
     @Test
     void shouldReturn3WhenGettingElementByIndex2(){
@@ -48,11 +55,26 @@ public class MyHashMapTest {
     }
 
     @Test
-    void shouldReturnTrueWhenRemovingElement(){
+    void shouldReturnNullWhenGettingElementByIndex6(){
+        assertThat(null, equalTo(map.getByKey(6)));
+    }
+
+    @Test
+    void shouldReturnNullWhenGettingElementByIndexNull(){
+        assertThat(null, equalTo(map.getByKey(null)));
+    }
+
+    @Test
+    void shouldReturnTrueWhenRemovingElement1(){
         assertThat(map.removeByKey(1), equalTo(true));
 
     }
 
+    @Test
+    void shouldReturnFalseWhenRemovingElement6(){
+        assertThat(map.removeByKey(6), equalTo(false));
+
+    }
     @Test
     void shouldReturnTrueWhenCheckingThatListContainsKey2() {
         assertThat(map.containsKey(2), equalTo(true));
@@ -106,6 +128,12 @@ public class MyHashMapTest {
         assertThat(actual.getNext(), equalTo(null));
     }
 
+    @Test
+    void shouldReturnFalseWhenCurrentElementIsNull(){
+        Iterator<MyHashMap.Entry<Integer, String>> iterator = nullMap.iterator();
+
+        assertThat(iterator.hasNext(), equalTo(false));
+    }
     @Test
     void shouldReturn20WhenCapacityIncreased(){
         assertThat(map.ensureCapacity(), equalTo(8));

@@ -284,6 +284,9 @@ public class MyLinkedHashMap<K, V> implements Map<K,V>, Iterable<MyLinkedHashMap
     }
     @Override
     public V getByKey(K key) {
+        if(key == null){
+            return null;
+        }
         int hash = hash(key);
 
         if (table[hash] != null) {

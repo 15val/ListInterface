@@ -93,6 +93,9 @@ public class MyHashMap<K, V> implements Map<K, V>, Iterable<MyHashMap.Entry<K, V
 
     @Override
     public V getByKey(K key) {
+        if(key == null){
+            return null;
+        }
         int hash = hash(key);
 
         if (table[hash] != null) {
