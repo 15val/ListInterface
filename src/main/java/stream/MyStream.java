@@ -10,7 +10,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         defaultList = receivedList;
     }
 
-
     @Override
     public Stream<E> filter(Predicate<? super E> predicate) {
         Stream.Builder<E> builder = Stream.builder();
@@ -37,7 +36,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         }
         return builder.build();
     }
-
 
     @Override
     public Stream<E> distinct() {
@@ -81,7 +79,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         }
         return builder.build();
     }
-
 
     @Override
     public Stream<E> limit(long maxSize) {
@@ -135,8 +132,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         }
     }
 
-
-
     @Override
     public Object[] toArray() {
 
@@ -146,10 +141,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         }
         return array;
     }
-
-
-
-
 
     @Override
     public Optional<E> min(Comparator<? super E> comparator) {
@@ -165,8 +156,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         return Optional.of(min);
     }
 
-
-
     @Override
     public Optional<E> max(Comparator<? super E> comparator) {
         ListIterator<E> listIterator = defaultList.listIterator();
@@ -180,7 +169,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         }
         return Optional.of(max);
     }
-
 
     @Override
     public boolean anyMatch(Predicate<? super E> predicate) {
@@ -220,7 +208,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         }
         return true;
     }
-
 
     @Override
         public Iterator<E> iterator() {
