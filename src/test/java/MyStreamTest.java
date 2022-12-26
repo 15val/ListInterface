@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import java.util.function.Consumer;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MyStreamTest {
@@ -32,6 +34,45 @@ public class MyStreamTest {
     }
 
     boolean assertStreamEquals(Stream<?> stream1, Stream<?> stream2) {
+        Iterator<?> iter1 = stream1.iterator(), iter2 = stream2.iterator();
+        while(iter1.hasNext() && iter2.hasNext()) {
+            if(!iter1.next().equals(iter2.next())){
+                return false;
+            }
+        }
+        if (!(!iter1.hasNext() && !iter2.hasNext())){
+            return false;
+        }
+        return true;
+    }
+
+    boolean assertIntStreamEquals(IntStream stream1, IntStream stream2) {
+        Iterator<?> iter1 = stream1.iterator(), iter2 = stream2.iterator();
+        while(iter1.hasNext() && iter2.hasNext()) {
+            if(!iter1.next().equals(iter2.next())){
+                return false;
+            }
+        }
+        if (!(!iter1.hasNext() && !iter2.hasNext())){
+            return false;
+        }
+        return true;
+    }
+
+    boolean assertLongStreamEquals(LongStream stream1, LongStream stream2) {
+        Iterator<?> iter1 = stream1.iterator(), iter2 = stream2.iterator();
+        while(iter1.hasNext() && iter2.hasNext()) {
+            if(!iter1.next().equals(iter2.next())){
+                return false;
+            }
+        }
+        if (!(!iter1.hasNext() && !iter2.hasNext())){
+            return false;
+        }
+        return true;
+    }
+
+    boolean assertDoubleStreamEquals(DoubleStream stream1, DoubleStream stream2) {
         Iterator<?> iter1 = stream1.iterator(), iter2 = stream2.iterator();
         while(iter1.hasNext() && iter2.hasNext()) {
             if(!iter1.next().equals(iter2.next())){
@@ -128,4 +169,41 @@ public class MyStreamTest {
         iterator.next();
         assertThat(iterator.next(), equalTo(2));
     }
+
+    @Test
+    void shouldReturnTrueWhen6ElementsInStream(){
+        assertThat(defaultStream.count(), equalTo(6L));
+    }
+
+    @Test
+    void shouldReturnAnyOfElements(){
+        assertThat(defaultStream.findAny(), anyOf(is(Optional.of(1)), is(Optional.of(2)), is(Optional.of(3)), is(Optional.of(4)), is(Optional.of(5)), is(Optional.of(6))));
+    }
+
+    @Test
+    void shouldReturnFirstElement(){
+        assertThat(defaultStream.findFirst(), equalTo(Optional.of(1)));
+    }
+
+    @Test
+    void shouldReturnIntStreamOf5678910(){
+        assertThat(assertIntStreamEquals(defaultStream.mapToInt(x-> x + 4), IntStream.of(5, 6, 7 , 8, 9, 10)), equalTo(true));
+    }
+
+    @Test
+    void shouldReturnLongStreamOf5678910(){
+        assertThat(assertLongStreamEquals(defaultStream.mapToLong(x-> x + 4), LongStream.of(5, 6, 7 , 8, 9, 10)), equalTo(true));
+    }
+
+    @Test
+    void shouldReturnDoubleStreamOf5678910(){
+        assertThat(assertDoubleStreamEquals(defaultStream.mapToDouble(x-> x + 4), DoubleStream.of(5, 6, 7 , 8, 9, 10)), equalTo(true));
+    }
+
+    /*Developer o1 = new Developer();
+    @Test
+    void shouldReturnStreamOf456789(){
+        assertThat(assertStreamEquals(defaultStream.flatMap(x-> x.longValue()), Stream.of(4, 5, 6, 7 , 8, 9)), equalTo(true));
+    }*/
 }
+

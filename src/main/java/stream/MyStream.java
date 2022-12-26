@@ -231,6 +231,88 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
     }
 
     @Override
+    public long count() {
+        ListIterator<E> listIterator = defaultList.listIterator();
+        long count = 0;
+        while (listIterator.hasNext()){
+            listIterator.next();
+            count++;
+        }
+        return count;
+    }
+
+    @Override
+    public Optional<E> findFirst() {
+        ListIterator<E> listIterator = defaultList.listIterator();
+        if(listIterator.hasNext()) {
+            return Optional.of(listIterator.next());
+        }
+        else return Optional.empty();
+    }
+
+    @Override
+    public Optional<E> findAny() {
+        ListIterator<E> listIterator = defaultList.listIterator();
+        if(listIterator.hasNext()) {
+            return Optional.of(listIterator.next());
+        }
+        else return Optional.empty();
+    }
+
+    @Override
+    public IntStream mapToInt(ToIntFunction<? super E> mapper) {
+        IntStream.Builder builder = IntStream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            builder.add(mapper.applyAsInt(current));
+        }
+        return builder.build();
+    }
+
+    @Override
+    public LongStream mapToLong(ToLongFunction<? super E> mapper) {
+        LongStream.Builder builder = LongStream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            builder.add(mapper.applyAsLong(current));
+        }
+        return builder.build();
+    }
+
+    @Override
+    public DoubleStream mapToDouble(ToDoubleFunction<? super E> mapper) {
+        DoubleStream.Builder builder = DoubleStream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            builder.add(mapper.applyAsDouble(current));
+        }
+        return builder.build();
+    }
+
+    @Override
+    public Stream<E> onClose(Runnable closeHandler) {
+        closeHandler.run();
+        Stream.Builder<E> builder = Stream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        while (listIterator.hasNext()){
+            builder.add(listIterator.next());
+        }
+        return builder.build();
+    }
+
+    @Override
+    public void close() {
+        defaultList.clear();
+    }
+
+
+    @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
         return null;
     }
@@ -251,7 +333,12 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
     }
     @Override
     public void forEachOrdered(Consumer<? super E> action) {
-
+       /* ListIterator<E> listIterator = defaultList.listIterator();
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            action.accept(current);
+        }*/
     }
     @Override
     public <R, A> R collect(Collector<? super E, A, R> collector) {
@@ -261,18 +348,9 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super E> accumulator, BiConsumer<R, R> combiner) {
         return null;
     }
-    @Override
-    public long count() {
-        return 0;
-    }
 
-    @Override
-    public Optional<E> findFirst() {
-        return Optional.empty();
-    }
     @Override
     public Stream<E> sorted() {
-
         return null;
     }
 
@@ -284,11 +362,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
     @Override
     public Stream<E> peek(Consumer<? super E> action) {
         return null;
-    }
-
-    @Override
-    public Optional<E> findAny() {
-        return Optional.empty();
     }
 
     @Override
@@ -317,32 +390,15 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
     }
 
     @Override
-    public Stream<E> onClose(Runnable closeHandler) {
-        return null;
-    }
-
-    @Override
-    public void close() {
-
-    }
-
-    @Override
-    public IntStream mapToInt(ToIntFunction<? super E> mapper) {
-        return null;
-    }
-
-    @Override
-    public LongStream mapToLong(ToLongFunction<? super E> mapper) {
-        return null;
-    }
-
-    @Override
-    public DoubleStream mapToDouble(ToDoubleFunction<? super E> mapper) {
-        return null;
-    }
-
-    @Override
     public <R> Stream<R> flatMap(Function<? super E, ? extends Stream<? extends R>> mapper) {
+       /* Stream.Builder<R> builder = Stream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            builder.add(mapper.apply(current));
+        }
+        return builder.build();*/
         return null;
     }
 
