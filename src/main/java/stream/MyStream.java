@@ -311,56 +311,117 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         defaultList.clear();
     }
 
-
-    @Override
-    public <A> A[] toArray(IntFunction<A[]> generator) {
-        return null;
-    }
-
-    @Override
-    public E reduce(E identity, BinaryOperator<E> accumulator) {
-        return null;
-    }
-
-    @Override
-    public Optional<E> reduce(BinaryOperator<E> accumulator) {
-        return Optional.empty();
-    }
-
-    @Override
-    public <U> U reduce(U identity, BiFunction<U, ? super E, U> accumulator, BinaryOperator<U> combiner) {
-        return null;
-    }
-    @Override
-    public void forEachOrdered(Consumer<? super E> action) {
-       /* ListIterator<E> listIterator = defaultList.listIterator();
-        E current;
-        while (listIterator.hasNext()){
-            current = listIterator.next();
-            action.accept(current);
-        }*/
-    }
-    @Override
-    public <R, A> R collect(Collector<? super E, A, R> collector) {
-        return null;
-    }
-    @Override
-    public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super E> accumulator, BiConsumer<R, R> combiner) {
-        return null;
-    }
-
     @Override
     public Stream<E> sorted() {
-        return null;
+        Collections.sort(defaultList, new Comparator<E>() {
+            @Override
+            public int compare(E o1, E o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        });
+        Stream.Builder<E> builder = Stream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        while (listIterator.hasNext()){
+            builder.add(listIterator.next());
+        }
+        return builder.build();
+
     }
 
     @Override
     public Stream<E> sorted(Comparator<? super E> comparator) {
-        return null;
+        Collections.sort(defaultList, comparator);
+        Stream.Builder<E> builder = Stream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        while (listIterator.hasNext()){
+            builder.add(listIterator.next());
+        }
+        return builder.build();
+
+    }
+
+    @Override
+    public void forEachOrdered(Consumer<? super E> action) {
+        Collections.sort(defaultList, new Comparator<E>() {
+            @Override
+            public int compare(E o1, E o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        });
+        ListIterator<E> listIterator = defaultList.listIterator();
+        E current;
+        while (listIterator.hasNext()) {
+            current = listIterator.next();
+            action.accept(current);
+        }
+    }
+
+    @Override
+    public E reduce(E identity, BinaryOperator<E> accumulator) {
+        ListIterator<E> listIterator = defaultList.listIterator();
+        E result = identity;
+        while (listIterator.hasNext()) {
+            result = accumulator.apply(result, listIterator.next());
+        }
+        return result;
+    }
+
+    @Override
+    public <U> U reduce(U identity, BiFunction<U, ? super E, U> accumulator, BinaryOperator<U> combiner) {
+        ListIterator<E> listIterator = defaultList.listIterator();
+        U result = identity;
+        while (listIterator.hasNext()) {
+            result = combiner.apply(result, accumulator.apply(result, listIterator.next()));
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<E> reduce(BinaryOperator<E> accumulator) {
+        ListIterator<E> listIterator = defaultList.listIterator();
+        Optional<E> result = Optional.empty();
+        if(listIterator.hasNext()) {
+            result = Optional.of(listIterator.next());
+        }
+        while (listIterator.hasNext()) {
+            result = Optional.of(accumulator.apply(result.get(), listIterator.next()));
+        }
+        return result;
     }
 
     @Override
     public Stream<E> peek(Consumer<? super E> action) {
+        Stream.Builder<E> builder = Stream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            action.accept(current);
+            builder.add(current);
+        }
+        return builder.build();
+    }
+
+    @Override
+    public <A> A[] toArray(IntFunction<A[]> generator) {
+        A[] array = generator.apply(defaultList.size());
+        ListIterator<E> listIterator = defaultList.listIterator();
+        int count = 0;
+        while (listIterator.hasNext()){
+           array[count] = (A) listIterator.next();
+           count++;
+        }
+        return array;
+    }
+
+    @Override
+    public <R, A> R collect(Collector<? super E, A, R> collector) {
+
+        return null;
+    }
+
+    @Override
+    public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super E> accumulator, BiConsumer<R, R> combiner) {
         return null;
     }
 
@@ -396,7 +457,7 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         E current;
         while (listIterator.hasNext()){
             current = listIterator.next();
-            builder.add(mapper.apply(current));
+            builder.add(mapper.apply();
         }
         return builder.build();*/
         return null;

@@ -17,6 +17,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+class Phone{
+
+    private String name;
+    private int price;
+
+    public Phone(String name, int price){
+        this.name=name;
+        this.price=price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+}
+
 public class MyStreamTest {
 
     public List<Integer> list = new ArrayList<>();
@@ -119,7 +138,7 @@ public class MyStreamTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outContent));
 
-        defaultStream.forEach(x -> System.out.println(x));
+        defaultStream.forEach(System.out::println);
 
 
         assertThat("1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n", equalTo(outContent.toString()));
@@ -200,7 +219,92 @@ public class MyStreamTest {
         assertThat(assertDoubleStreamEquals(defaultStream.mapToDouble(x-> x + 4), DoubleStream.of(5, 6, 7 , 8, 9, 10)), equalTo(true));
     }
 
-    /*Developer o1 = new Developer();
+    @Test
+    void shouldReturnStreamOf12345678elements(){
+        list.add(8);
+        list.add(7);
+        defaultStream = new MyStream<>(list);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        defaultStream.sorted().forEach(System.out::println);
+
+
+        assertThat("1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n", equalTo(outContent.toString()));
+    }
+
+    @Test
+    void shouldReturnStreamOf123456789elements(){
+        list.add(8);
+        list.add(9);
+        list.add(7);
+        defaultStream = new MyStream<>(list);
+
+        Comparator<Integer> comparator = new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        };
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        defaultStream.sorted(comparator).forEach(System.out::println);
+
+
+        assertThat("1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n", equalTo(outContent.toString()));
+    }
+
+    @Test
+    void shouldReturnStreamOf12345678elementsByForEachOrdered(){
+        list.add(8);
+        list.add(7);
+        defaultStream = new MyStream<>(list);
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+
+        defaultStream.forEachOrdered(System.out::println);
+
+
+        assertThat("1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n", equalTo(outContent.toString()));
+    }
+
+    @Test
+    void shouldReturnSumAs22(){
+        assertThat(defaultStream.reduce(1, (x,y)->x + y), equalTo(22));
+    }
+
+    @Test
+    void shouldReturnSumAs21(){
+        assertThat(defaultStream.reduce((x,y)->x + y), equalTo(Optional.of(21)));
+    }
+
+    @Test
+    void shouldReturnSumAs10(){
+        Stream<Phone> phoneStream = Stream.of(new Phone("iPhone 6 S", 1),
+                new Phone("Lumia 950", 2),
+                new Phone("Samsung Galaxy S 6", 3),
+                new Phone("LG G 4", 4));
+
+        assertThat(phoneStream.reduce(0,
+                (x,y)-> {
+                    return x + y.getPrice();
+                },
+                (x, y)->x + y), equalTo(10));
+    }
+
+
+    @Test
+    void shouldReturnArray0f123456(){
+        Integer[] arr = new Integer[]{1, 2, 3, 4, 5, 6};
+        Integer[] arr2 = defaultStream.toArray(Integer[]::new);
+        assertArrayEquals(arr, arr2);
+    }
+    /*
     @Test
     void shouldReturnStreamOf456789(){
         assertThat(assertStreamEquals(defaultStream.flatMap(x-> x.longValue()), Stream.of(4, 5, 6, 7 , 8, 9)), equalTo(true));
