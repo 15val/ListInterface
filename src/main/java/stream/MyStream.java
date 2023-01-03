@@ -415,6 +415,63 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
     }
 
     @Override
+    public <R> Stream<R> flatMap(Function<? super E, ? extends Stream<? extends R>> mapper) {
+        Stream.Builder<R> builder = Stream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        Optional<?> temp;
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            temp =  mapper.apply(current).findFirst();
+            builder.add((R) temp.get());
+        }
+        return builder.build();
+
+    }
+
+    @Override
+    public IntStream flatMapToInt(Function<? super E, ? extends IntStream> mapper) {
+        IntStream.Builder builder = IntStream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        OptionalInt temp;
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            temp = mapper.apply(current).findFirst();
+            builder.add(temp.getAsInt());
+        }
+        return builder.build();
+    }
+
+    @Override
+    public LongStream flatMapToLong(Function<? super E, ? extends LongStream> mapper) {
+        LongStream.Builder builder = LongStream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        OptionalLong temp;
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            temp = mapper.apply(current).findFirst();
+            builder.add(temp.getAsLong());
+        }
+        return builder.build();
+    }
+
+    @Override
+    public DoubleStream flatMapToDouble(Function<? super E, ? extends DoubleStream> mapper) {
+        DoubleStream.Builder builder = DoubleStream.builder();
+        ListIterator<E> listIterator = defaultList.listIterator();
+        OptionalDouble temp;
+        E current;
+        while (listIterator.hasNext()){
+            current = listIterator.next();
+            temp = mapper.apply(current).findFirst();
+            builder.add(temp.getAsDouble());
+        }
+        return builder.build();
+    }
+
+    @Override
     public <R, A> R collect(Collector<? super E, A, R> collector) {
 
         return null;
@@ -450,32 +507,6 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
         return null;
     }
 
-    @Override
-    public <R> Stream<R> flatMap(Function<? super E, ? extends Stream<? extends R>> mapper) {
-       /* Stream.Builder<R> builder = Stream.builder();
-        ListIterator<E> listIterator = defaultList.listIterator();
-        E current;
-        while (listIterator.hasNext()){
-            current = listIterator.next();
-            builder.add(mapper.apply();
-        }
-        return builder.build();*/
-        return null;
-    }
 
-    @Override
-    public IntStream flatMapToInt(Function<? super E, ? extends IntStream> mapper) {
-        return null;
-    }
-
-    @Override
-    public LongStream flatMapToLong(Function<? super E, ? extends LongStream> mapper) {
-        return null;
-    }
-
-    @Override
-    public DoubleStream flatMapToDouble(Function<? super E, ? extends DoubleStream> mapper) {
-        return null;
-    }
 
 }

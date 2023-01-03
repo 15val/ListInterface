@@ -304,6 +304,26 @@ public class MyStreamTest {
         Integer[] arr2 = defaultStream.toArray(Integer[]::new);
         assertArrayEquals(arr, arr2);
     }
+
+    @Test
+    void shouldReturnIntStreamOf67891011(){
+        assertThat(assertIntStreamEquals(defaultStream.flatMapToInt(x-> IntStream.of(x + 5)), IntStream.of(6, 7 , 8, 9, 10, 11)), equalTo(true));
+    }
+
+    @Test
+    void shouldReturnLongStreamOf67891011(){
+        assertThat(assertLongStreamEquals(defaultStream.flatMapToLong(x-> LongStream.of(x + 5)), LongStream.of(6, 7 , 8, 9, 10, 11)), equalTo(true));
+    }
+
+    @Test
+    void shouldReturnDoubleStreamOf67891011(){
+        assertThat(assertDoubleStreamEquals(defaultStream.flatMapToDouble(x-> DoubleStream.of(x + 5)), DoubleStream.of(6, 7 , 8, 9, 10, 11)), equalTo(true));
+    }
+
+    @Test
+    void shouldReturnStreamOf5678910(){
+        assertThat(assertStreamEquals(defaultStream.flatMap(x-> Stream.of(x + 4)), Stream.of(5, 6, 7 , 8, 9, 10)), equalTo(true));
+    }
     /*
     @Test
     void shouldReturnStreamOf456789(){
