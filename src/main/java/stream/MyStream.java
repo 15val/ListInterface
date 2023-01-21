@@ -473,13 +473,33 @@ public class MyStream<E> implements Stream<E>, Iterable<E> {
 
     @Override
     public <R, A> R collect(Collector<? super E, A, R> collector) {
+        ListIterator<E> listIterator = defaultList.listIterator();
+        A result = (A) Optional.empty().get();
+        if(listIterator.hasNext()) {
+            collector.accumulator().accept(result, listIterator.next());
+        }
 
-        return null;
+        while (listIterator.hasNext()) {
+            collector.accumulator().accept(result, listIterator.next());
+        }
+        collector.combiner().apply(result, collector.supplier().get());
+        return (R) result;
     }
 
     @Override
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super E> accumulator, BiConsumer<R, R> combiner) {
-        return null;
+        ListIterator<E> listIterator = defaultList.listIterator();
+        R result = (R) Optional.empty().get();
+        if(listIterator.hasNext()) {
+            accumulator.accept(result, listIterator.next());
+        }
+
+        while (listIterator.hasNext()) {
+            accumulator.accept(result, listIterator.next());
+        }
+        combiner.accept(result, supplier.get());
+        return result;
+
     }
 
     @Override
